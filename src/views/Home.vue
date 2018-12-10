@@ -1,0 +1,219 @@
+
+<template>
+  <div id="homeView">
+    <div id="budheader" class="box">Budget Stuff</div>
+    <div id="sidebar" class="box">Sidebar</div>
+    <div id="mobileSidebar">
+      <div id="mobileMenuSidebar" class="box"><button class="circle" v-on:click="miniOpen = !miniOpen">M</button></div>
+      <div v-if="miniOpen"><button id="statsBubble" class="minicircle" v-on:click="openBudget()">B</button></div>
+      <div v-if="miniOpen"><button id="purchaseBubble" class="minicircle" v-on:click="openPurchase()">P</button></div>
+      <div v-if="miniOpen"><button id="settingBubble" class="minicircle">O</button></div>
+    </div>
+    <div id="purchase" class="box">Purchase</div>
+    <div id="budgetAndFinancialsContainer" class="box flex-container scrollSide">
+      <budgetGroup></budgetGroup>
+      <div class="budgetGroupCreation">
+        <button id="addBudgetGroup">
+          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+            <path fill="#FD0EBF" d="M3 0v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2z"></path>
+          </svg>
+          Add Group
+        </button>
+      </div>
+    </div>
+    <div id="budfooter" class="box">Footer</div>
+  </div>
+</template>
+
+<script>
+import budgetGroup from '../components/budgetGroup.vue'
+
+export default {
+  name: 'homeView',
+  components: {
+    budgetGroup
+  },
+  data: () => {
+    return {
+      miniOpen: false
+    }
+  },
+  methods: {
+    openPurchase () {
+      document.getElementById('budgetAndFinancialsContainer').style.zIndex = '10'
+      document.getElementById('purchase').style.zIndex = '15'
+    },
+    openBudget () {
+      document.getElementById('purchase').style.zIndex = '10'
+      document.getElementById('budgetAndFinancialsContainer').style.zIndex = '15'
+    }
+  }
+}
+
+</script>
+
+<style scoped>
+
+  #homeView {
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    grid-gap: .1em;
+    height: 100vh;
+    display: grid;
+  }
+  #budheader {
+    display: none;
+    padding: 1em 0;
+  }
+
+  .scrollSide {
+    overflow-y: auto;
+  }
+
+  #budfooter, #sidebar {
+    display: none;
+  }
+
+  #budgetAndFinancialsContainer{
+    position: absolute;
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+  }
+
+  #purchase {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 5;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  @media screen and (min-width: 600px) {
+
+    #homeView {
+      grid-template-columns: 6% 35% auto;
+      grid-template-rows: 100%;
+      grid-gap: .1em;
+      height: 100vh;
+      display: grid;
+    }
+
+    #budgetAndFinancialsContainer {
+      position: relative;
+    }
+
+    #sidebar {
+      display: block;
+    }
+
+    #mobileSidebar {
+      display: none;
+    }
+
+    #purchase {
+      position: relative;
+      display: block;
+      grid-row: 1/2;
+      grid-column: 3/4;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+
+    #homeView {
+      grid-template-columns: 45% 55%;
+      grid-template-rows: .8fr 8.7fr .5fr;
+      grid-gap: .1em;
+    }
+
+    #budheader {
+      display: block;
+      grid-row: 1/2;
+      grid-column: 1/3;
+    }
+
+    #budgetAndFinancialsContainer {
+      grid-row: 2/3;
+      grid-column: 1/2;
+    }
+
+    #purchase {
+      grid-row: 2/3;
+      grid-column: 2/3;
+    }
+
+    .flex-container {
+      flex-direction: row;
+    }
+
+    #sidebar {
+      display: none;
+    }
+
+    #budfooter {
+      display: block;
+      grid-row: 3/4;
+      grid-column: 1/3;
+    }
+  }
+</style>
+
+<style>
+
+  #statsBubble {
+    position: fixed;
+    bottom: 66px;
+    left: 13px;
+    background-color: green;
+  }
+
+  #settingBubble{
+    position: fixed;
+    bottom: 5px;
+    left: 76px;
+    background-color: red;
+  }
+
+  #purchaseBubble {
+    position: fixed;
+    bottom: 42px;
+    left: 53px;
+    background-color: purple;
+  }
+
+  #mobileMenuSidebar {
+    position: fixed;
+    bottom: -34px;
+    left: -33px;
+  }
+
+  #mobileSidebar {
+    position: fixed;
+    bottom: -34px;
+    left: -33px;
+    z-index: 10000;
+  }
+
+  .budgetGroupCreation {
+    background: purple;
+  }
+
+  .minicircle {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+  }
+
+  .circle {
+    height: 89px;
+    width: 89px;
+    border-radius: 50%;
+    background: blue;
+  }
+</style>
