@@ -32,7 +32,12 @@ export const store = new Vuex.Store({
   },
   mutations: {
     // Mutate the current state
-    // Used to create a new row and push into budgetRows array (generate uniq id as well)
+    // Used to create a new group and push into budgets Group object
+    createGroup (state) {
+      const uid = uniqId()
+      Vue.set(state.budgetGroups, [uid], {})
+    },
+    // Used to create a new row and push into budgetRows object (generate uniq id as well)
     createRow (state) {
       const uid = uniqId()
       Vue.set(state.budgetRows, [uid], {

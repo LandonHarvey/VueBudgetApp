@@ -11,9 +11,11 @@
     </div>
     <div id="purchase" class="box">Purchase</div>
     <div id="budgetAndFinancialsContainer" class="box flex-container scrollSide">
+      <div v-for="(budget, key) in budgetLists" :key="key">
       <budgetGroup></budgetGroup>
+      </div>
       <div class="budgetGroupCreation">
-        <button id="addBudgetGroup">
+        <button id="addBudgetGroup" v-on:click="createBudgetGroup()">
           <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
             <path fill="#FD0EBF" d="M3 0v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2z"></path>
           </svg>
@@ -38,6 +40,11 @@ export default {
       miniOpen: false
     }
   },
+  computed: {
+    budgetLists () {
+      return this.$store.getters.budgetGroupsList
+    }
+  },
   methods: {
     openPurchase () {
       document.getElementById('budgetAndFinancialsContainer').style.zIndex = '10'
@@ -46,6 +53,9 @@ export default {
     openBudget () {
       document.getElementById('purchase').style.zIndex = '10'
       document.getElementById('budgetAndFinancialsContainer').style.zIndex = '15'
+    },
+    createBudgetGroup () {
+      this.$store.commit('createGroup')
     }
   }
 }
