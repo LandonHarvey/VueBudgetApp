@@ -4,8 +4,8 @@
     <div class="budgetItemContainer">
       <div class="budgetItemRow">
         <!--creates new component when click event happens and places below-->
-        <div v-for="(budget, key) in budgetRowsList" :key="key" v-if="Object.keys(budgetRowsList).length">
-          <budgetItemRowContent :uid="key" :budgetitem="budget"></budgetItemRowContent>
+        <div v-for="(budget, key) in budgetItemRowsList" :key="key" v-if="Object.keys(budgetItemRowsList).length">
+          <budgetItemRowContent :groupId="numi" :budgetitem="budget"></budgetItemRowContent>
           <progress data-min="0" data-max="100" data-value="20"></progress>
         </div>
       </div>
@@ -33,6 +33,16 @@ export default {
     budgetItemRowContent,
     store
   },
+  props: {
+    numi: {
+      type: Number,
+      required: true
+    },
+    groupCard: {
+      type: Array,
+      required: true
+    }
+  },
   data: () => {
     return {
       budgetItemHeading: 'Housing'
@@ -40,13 +50,13 @@ export default {
     }
   },
   computed: {
-    budgetRowsList () {
-      return this.$store.getters.budgetList
+    budgetItemRowsList () {
+      return this.$store.getters.budgetGroupsList[this.numi]
     }
   },
   methods: {
     createNewContent () {
-      this.$store.commit('createRow')
+      this.$store.commit('createRow', this.numi) // props directly as they get proxied to the main instance
     }
   }
 }

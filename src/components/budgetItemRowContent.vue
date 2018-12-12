@@ -1,6 +1,7 @@
 <template>
   <div class="budgetItemRowContent">
 
+    <!--input will update inputBudget-->
     <div class="budgetItemRow-Column">
       <div class="budgetItemLabel">
         <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
@@ -27,8 +28,8 @@
 <script>
 export default {
   props: {
-    uid: {
-      type: String,
+    groupId: {
+      type: Number,
       required: true
     },
     budgetitem: {
@@ -39,18 +40,26 @@ export default {
   computed: {
     label: {
       get () {
-        return this.$store.state.budgetRows[this.uid].inputBudget
+        return this.budgetitem.inputBudget
       },
-      set (value) {
-        this.$store.commit('updateInputBudget', {uid: this.uid, label: value})
+      set (label) {
+        this.$store.commit('updateInputBudget', {
+          uid: this.budgetitem.id,
+          groupId: this.groupId,
+          label: label
+        })
       }
     },
     amount: {
       get () {
-        return this.$store.state.budgetRows[this.uid].amountBudgeted
+        return this.budgetitem.amountBudgeted
       },
       set (value) {
-        this.$store.commit('updateAmountBudgeted', {uid: this.uid, amount: value})
+        this.$store.commit('updateAmountBudgeted', {
+          uid: this.budgetitem.id,
+          groupId: this.groupId,
+          amount: value
+        })
       }
     }
   }

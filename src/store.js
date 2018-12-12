@@ -12,50 +12,52 @@ const uniqId = () => {
 }
 
 export const store = new Vuex.Store({
-
   state: {
     // Current state of the application lies here.
-    // budgetRows array at webpage load, base state
-    budgetGroups: {},
-    budgetRows: {}
+    // State objects at web page load, base state
+    budgetGroups: []
   },
+
   getters: {
     // Compute derived state based on the current state. More like computed property.
+    // gets the budgetGroup objects
     budgetGroupsList: state => {
       return state.budgetGroups
-    },
-    // Gets budgetRows array from state
-    budgetList: state => {
-      return state.budgetRows
     }
     // should get single array items from budgetRows based on component being accessed
   },
+
   mutations: {
     // Mutate the current state
     // Used to create a new group and push into budgets Group object
     createGroup (state) {
       const uid = uniqId()
-      Vue.set(state.budgetGroups, [uid], {})
+      state.budgetGroups.push({
+        [uid]: {
+          inputBudget: '',
+          amountBudgeted: 0,
+          remaining: 0,
+          id: uid
+        }
+      })
     },
-    // Used to create a new row and push into budgetRows object (generate uniq id as well)
-    createRow (state) {
+    // Used to create a new row and set into budgetRows object (generate uniq id as well)
+    createRow (state, index) {
       const uid = uniqId()
-      Vue.set(state.budgetRows, [uid], {
+
+      Vue.set(state.budgetGroups[index], [uid], {
         inputBudget: '',
         amountBudgeted: 0,
-        remaining: 0
+        remaining: 0,
+        id: uid
       })
-      // console.log(state.budgetRows)
     },
     // suppose to mutate the current row of that components amountbudgeted item in array
     updateAmountBudgeted (state, payload) {
-      state.budgetRows[payload.uid].amountBudgeted = payload.amount
+      state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount
     },
     updateInputBudget (state, payload) {
-      state.budgetRows[payload.uid].inputBudget = payload.label
+      state.budgetGroups[payload.groupId][payload.uid].inputBudget = payload.label
     }
-  },
-  actions: {
-    // Get data from server and send that to mutations to mutate the current state
   }
 })

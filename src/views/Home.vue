@@ -4,15 +4,15 @@
     <div id="budheader" class="box">Budget Stuff</div>
     <div id="sidebar" class="box">Sidebar</div>
     <div id="mobileSidebar">
-      <div id="mobileMenuSidebar" class="box"><button class="circle" v-on:click="miniOpen = !miniOpen">M</button></div>
+      <div id="mobileMenuSidebar" class="box"><button id="mCircle" v-on:click="miniOpen = !miniOpen">M</button></div>
       <div v-if="miniOpen"><button id="statsBubble" class="minicircle" v-on:click="openBudget()">B</button></div>
       <div v-if="miniOpen"><button id="purchaseBubble" class="minicircle" v-on:click="openPurchase()">P</button></div>
       <div v-if="miniOpen"><button id="settingBubble" class="minicircle">O</button></div>
     </div>
     <div id="purchase" class="box">Purchase</div>
     <div id="budgetAndFinancialsContainer" class="box flex-container scrollSide">
-      <div v-for="(budget, key) in budgetLists" :key="key">
-      <budgetGroup></budgetGroup>
+      <div v-for="(budget, key) in budgetGroupViewLists" :key="key">
+      <budgetGroup :numi="key" :group-card="[budget]"></budgetGroup>
       </div>
       <div class="budgetGroupCreation">
         <button id="addBudgetGroup" v-on:click="createBudgetGroup()">
@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    budgetLists () {
+    budgetGroupViewLists () {
       return this.$store.getters.budgetGroupsList
     }
   },
@@ -198,9 +198,7 @@ export default {
   }
 
   #mobileMenuSidebar {
-    position: fixed;
-    bottom: -34px;
-    left: -33px;
+
   }
 
   #mobileSidebar {
@@ -220,10 +218,13 @@ export default {
     border-radius: 50%;
   }
 
-  .circle {
+  #mCircle {
     height: 89px;
     width: 89px;
     border-radius: 50%;
     background: blue;
+    position: fixed;
+    bottom: -34px;
+    left: -33px;
   }
 </style>
