@@ -1,32 +1,45 @@
 <template>
-  <div class="budgetItemRowContent">
+  <div>
+    <div class="budgetItemRowContent">
+      <!--input will update inputBudget-->
+      <div class="budgetItemRow-Column">
+        <div class="budgetItemLabel">
+          <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
+        </div>
+      </div>
 
-    <!--input will update inputBudget-->
-    <div class="budgetItemRow-Column">
-      <div class="budgetItemLabel">
-        <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
+      <!--input that will update amoundbudgeted -->
+      <div class="budgetItemRow-Column">
+        <div class="amountBudgetedInputContainer">
+          <input v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
+        </div>
+      </div>
+      <div class="budgetItemRow-Column">
+              <span class="budgetItemSecondColumnMoney-Spent">
+                  <span class="money-symbol">$</span>
+                  <span class="money-integer"></span>
+                  <!--<span class="money-decimal">.</span>-->
+                  <!--<span class="money-fractional">00</span>-->
+              </span>
       </div>
     </div>
-
-    <!--input that will update amoundbudgeted -->
-    <div class="budgetItemRow-Column">
-      <div class="amountBudgetedInputContainer">
-        <input v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
-      </div>
-    </div>
-    <div class="budgetItemRow-Column">
-            <span class="budgetItemSecondColumnMoney-Spent">
-                <span class="money-symbol">$</span>
-                <span class="money-integer"></span>
-              <!--<span class="money-decimal">.</span>-->
-              <!--<span class="money-fractional">04</span>-->
-            </span>
+    <div v-for="(trans, key) of budgetTransRowsList" :key="key">
+      <budgetDetails :groupBudgetId="groupId" :transItem="trans"></budgetDetails>
     </div>
   </div>
 </template>
 
+<!--<div v-for="(trans, key) in budgetItemRowsList" :key="key">-->
+  <!--<budgetDetails :groupId="numi" :transtitem="trans"></budgetDetails>-->
+<!--</div>-->
+
 <script>
+import budgetDetails from '../components/budgetDetails.vue'
+
 export default {
+  components: {
+    budgetDetails
+  },
   props: {
     groupId: {
       type: Number,
@@ -61,13 +74,26 @@ export default {
           amount: value
         })
       }
+    },
+    budgetTransRowsList () {
+      console.log(this.budgetitem.trans)
+      return this.budgetitem.trans
     }
+  },
+  methods: {
+
   }
 }
 
 </script>
 
 <style scoped>
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
   .budgetItemRowContent {
     display: flex;
@@ -85,6 +111,7 @@ export default {
     flex-wrap: wrap;
     display: flex;
     flex: 0 1 50%;
+    z-index: 2;
   }
 
   .budgetItemRow-Column:nth-child(2), .budgetItemRow-Column:nth-child(3) {
@@ -93,6 +120,7 @@ export default {
     align-items: flex-end;
     display: flex;
     flex: 0 1 25%;
+    z-index: 2 ;
   }
 
   .budgetItemLabel {

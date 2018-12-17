@@ -10,12 +10,27 @@ const uniqId = () => {
     return (Math.random() * 16 | 0).toString(16)
   }).toLowerCase()
 }
-
+const uid = uniqId()
 export const store = new Vuex.Store({
+
   state: {
     // Current state of the application lies here.
     // State objects at web page load, base state
-    budgetGroups: []
+    budgetGroups: [
+      {[uid]: {
+        inputBudget: '',
+        amountBudgeted: 0,
+        remaining: 0,
+        id: uid,
+        trans: [
+          {[uid]: {
+            transDate: new Date(),
+            transLabel: '',
+            transCost: 0
+          }}
+        ]
+      }}
+    ]
   },
 
   getters: {
@@ -31,7 +46,6 @@ export const store = new Vuex.Store({
     // Mutate the current state
     // Used to create a new group and push into budgets Group object
     createGroup (state) {
-      const uid = uniqId()
       state.budgetGroups.push({
         [uid]: {
           inputBudget: '',
@@ -44,7 +58,6 @@ export const store = new Vuex.Store({
     // Used to create a new row and set into budgetRows object (generate uniq id as well)
     createRow (state, index) {
       const uid = uniqId()
-
       Vue.set(state.budgetGroups[index], [uid], {
         inputBudget: '',
         amountBudgeted: 0,
@@ -52,6 +65,15 @@ export const store = new Vuex.Store({
         id: uid
       })
     },
+    // createTrans (state,index) {
+    //   state.budgetGroups[index].trans[index].push ({
+    //     [uid]: {
+    //       transDate: new Date(),
+    //       transLabel: '',
+    //       transCost: 0
+    //     }
+    //   })
+    // },
     // suppose to mutate the current row of that components amountbudgeted item in array
     updateAmountBudgeted (state, payload) {
       state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount

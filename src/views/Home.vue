@@ -197,10 +197,6 @@ export default {
     background-color: purple;
   }
 
-  #mobileMenuSidebar {
-
-  }
-
   #mobileSidebar {
     position: fixed;
     bottom: -34px;
