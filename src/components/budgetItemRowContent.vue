@@ -17,14 +17,14 @@
       <div class="budgetItemRow-Column">
               <span class="budgetItemSecondColumnMoney-Spent">
                   <span class="money-symbol">$</span>
-                  <span class="money-integer"></span>
+                  <span class="money-integer">{{ this.budgetitem.remaining }}</span>
                   <!--<span class="money-decimal">.</span>-->
                   <!--<span class="money-fractional">00</span>-->
               </span>
       </div>
     </div>
     <div v-for="(trans, key) of budgetTransRowsList" :key="key">
-      <budgetDetails :groupBudgetId="groupId" :transItem="trans"></budgetDetails>
+      <budgetDetails id="transContainer" :rowuid="budgetitem.id" :groupBudgetId="groupId" :transItem="trans"></budgetDetails>
     </div>
     <div id="transactionContainer">
       <div id="addTransaction">
@@ -38,10 +38,6 @@
     </div>
   </div>
 </template>
-
-<!--<div v-for="(trans, key) in budgetItemRowsList" :key="key">-->
-  <!--<budgetDetails :groupId="numi" :transtitem="trans"></budgetDetails>-->
-<!--</div>-->
 
 <script>
 import budgetDetails from '../components/budgetDetails.vue'
@@ -174,6 +170,11 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-self: center;
+  }
+
+  #transContainer {
+    margin: 0 auto;
+    width: 98%;
   }
 
   #addTransaction {

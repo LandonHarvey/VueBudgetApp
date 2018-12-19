@@ -12,6 +12,7 @@ const uniqId = () => {
   }).toLowerCase()
 }
 const uid = uniqId()
+
 export const store = new Vuex.Store({
 
   state: {
@@ -65,7 +66,7 @@ export const store = new Vuex.Store({
         }
       })
     },
-    // Used to create a new row and set into budgetRows object (generate uniq id as well)
+    // creates a new row and set into budgetRows object (generate uniq id as well)
     createRow (state, index) {
       const uid = uniqId()
       Vue.set(state.budgetGroups[index], [uid], {
@@ -83,9 +84,9 @@ export const store = new Vuex.Store({
         ]
       })
     },
+    // creates a new transaction row and pushes into transaction array
     createTrans (state, payload) {
       const uid = uniqId()
-      console.log(state.budgetGroups[payload.id][payload.buz].trans)
       state.budgetGroups[payload.id][payload.buz].trans.push({
         transDate: moment().format('MMM Do YY'),
         transLabel: '',
@@ -93,12 +94,28 @@ export const store = new Vuex.Store({
         transId: uid
       })
     },
-    // suppose to mutate the current row of that components amountbudgeted item in array
+    // mutate the current rows AmountBudgeted
     updateAmountBudgeted (state, payload) {
       state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount
     },
+    // mutate the current rows inputBudgeted
     updateInputBudget (state, payload) {
       state.budgetGroups[payload.groupId][payload.uid].inputBudget = payload.label
+    },
+    // mutate the current transaction rows Cost
+    updateTransCost (state, payload) {
+      const transactionId = state.budgetGroups[payload.groupBudgetId][payload.uid].trans.findIndex(index => {
+        return (index.transId === payload.tranid)
+      })
+      state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionId].transCost = payload.transAmount
+    },
+    // mutate the current transaction rows Label
+    updateTransLabel (state, payload) {
+      const transactionLabelId = state.budgetGroups[payload.groupBudgetId][payload.uid].trans.findIndex(index => {
+        return (index.transId === payload.tranid)
+      })
+      console.log(state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionLabelId].transLabel)
+      state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionLabelId].transLabel = payload.transLabel
     }
   }
 })

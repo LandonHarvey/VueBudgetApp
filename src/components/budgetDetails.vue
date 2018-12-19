@@ -5,14 +5,14 @@
     <!--input will update transLabel-->
     <div class="transItemRow-Column">
       <div class="transItemLabel">
-        <input type="text" maxlength="32" placeholder="transLabel" class="input-Trans-Inline-Small transItemRow-Input">
+        <input v-model="tranLabel" type="text" maxlength="32" placeholder="transLabel" class="input-Trans-Inline-Small transItemRow-Input">
       </div>
     </div>
 
     <!--input that will update Trans Amount -->
     <div class="transItemRow-Column">
       <div class="transInputContainer">
-        <input step=".01" class="transNumber transItemRow-Input input-Trans-Inline-Small" type="number" placeholder="$">
+        <input v-model.number="transAmount" step=".01" class="transNumber transItemRow-Input input-Trans-Inline-Small" type="number" placeholder="$">
       </div>
     </div>
     <div class="transItemRow-Column">
@@ -34,9 +34,40 @@ export default {
     transItem: {
       type: Object,
       required: true
+    },
+    rowuid: {
+      type: String,
+      required: true
     }
   },
   computed: {
+    transAmount: {
+      get () {
+        return this.transItem.transCost
+      },
+      set (value) {
+        this.$store.commit('updateTransCost', {
+          transAmount: value,
+          groupBudgetId: this.groupBudgetId,
+          tranid: this.transItem.transId,
+          uid: this.rowuid
+        })
+      }
+    },
+    tranLabel: {
+      get () {
+        return this.transItem.transLabel
+      },
+      set (label) {
+        this.$store.commit('updateTransLabel', {
+          transLabel: label,
+          groupBudgetId: this.groupBudgetId,
+          tranid: this.transItem.transId,
+          uid: this.rowuid
+
+        })
+      }
+    }
   }
 }
 </script>
