@@ -15,16 +15,6 @@
           <progress data-min="0" data-max="100" data-value="20"></progress>
           <budgetItemRowContent :groupId="numi" :budgetitem="budget"></budgetItemRowContent>
             <!--will create a new Transaction row inside of budgetRow-->
-            <div id="transactionContainer">
-              <div id="addTransaction">
-                <button @click="createNewTrans()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
-                    <path fill="#FD0EBF" d="M3 0v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2z"></path>
-                  </svg>
-                Add Transaction
-              </button>
-              </div>
-            </div>
         </div>
       </div>
     </div>
@@ -80,9 +70,6 @@ export default {
     // Creates a new Budget Row when a button is clicked
     createNewContent () {
       this.$store.commit('createRow', this.numi) // props directly as they get proxied to the main instance
-    },
-    createNewTrans () {
-      this.$store.commit('createTrans', this.numi)
     },
     // Switches from Spent to Remaining, will eventually change progress bars and numbers
     switchBudgetFields () {
@@ -159,22 +146,6 @@ export default {
     position: relative;
     border: 0;
     vertical-align: baseline;
-  }
-
-  #transactionContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-self: center;
-  }
-
-  #addTransaction {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-self: center;
-    background: white;
-    width: 98%;
   }
 
   header>input {

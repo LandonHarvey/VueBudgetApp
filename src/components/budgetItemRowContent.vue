@@ -26,6 +26,16 @@
     <div v-for="(trans, key) of budgetTransRowsList" :key="key">
       <budgetDetails :groupBudgetId="groupId" :transItem="trans"></budgetDetails>
     </div>
+    <div id="transactionContainer">
+      <div id="addTransaction">
+        <button @click="createNewTrans()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+            <path fill="#FD0EBF" d="M3 0v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2z"></path>
+          </svg>
+          Add Transaction
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -76,12 +86,17 @@ export default {
       }
     },
     budgetTransRowsList () {
-      console.log(this.budgetitem.trans)
-      return this.budgetitem.trans
+      return this.$store.getters.budgetGroupsList[this.groupId][this.budgetitem.id].trans
     }
   },
   methods: {
-
+    createNewTrans () {
+      this.$store.commit({
+        type: 'createTrans',
+        id: this.groupId,
+        buz: this.budgetitem.id
+      })
+    }
   }
 }
 
@@ -152,6 +167,22 @@ export default {
 
   .amountBudgetedNumber {
     border: none;
+  }
+
+  #transactionContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+  }
+
+  #addTransaction {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-self: center;
+    background: white;
+    width: 98%;
   }
 
 </style>

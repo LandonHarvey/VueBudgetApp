@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import moment from 'moment'
 
 Vue.use(Vuex)
 
@@ -23,11 +24,12 @@ export const store = new Vuex.Store({
         remaining: 0,
         id: uid,
         trans: [
-          {[uid]: {
-            transDate: new Date(),
+          {
+            transDate: moment().format('MMM Do YY'),
             transLabel: '',
-            transCost: 0
-          }}
+            transCost: 0,
+            transId: uid
+          }
         ]
       }}
     ]
@@ -51,7 +53,15 @@ export const store = new Vuex.Store({
           inputBudget: '',
           amountBudgeted: 0,
           remaining: 0,
-          id: uid
+          id: uid,
+          trans: [
+            {
+              transDate: moment().format('MMM Do YY'),
+              transLabel: '',
+              transCost: 0,
+              transId: uid
+            }
+          ]
         }
       })
     },
@@ -62,18 +72,27 @@ export const store = new Vuex.Store({
         inputBudget: '',
         amountBudgeted: 0,
         remaining: 0,
-        id: uid
+        id: uid,
+        trans: [
+          {
+            transDate: moment().format('MMM Do YY'),
+            transLabel: '',
+            transCost: 0,
+            transId: uid
+          }
+        ]
       })
     },
-    // createTrans (state,index) {
-    //   state.budgetGroups[index].trans[index].push ({
-    //     [uid]: {
-    //       transDate: new Date(),
-    //       transLabel: '',
-    //       transCost: 0
-    //     }
-    //   })
-    // },
+    createTrans (state, payload) {
+      const uid = uniqId()
+      console.log(state.budgetGroups[payload.id][payload.buz].trans)
+      state.budgetGroups[payload.id][payload.buz].trans.push({
+        transDate: moment().format('MMM Do YY'),
+        transLabel: '',
+        transCost: 0,
+        transId: uid
+      })
+    },
     // suppose to mutate the current row of that components amountbudgeted item in array
     updateAmountBudgeted (state, payload) {
       state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount
