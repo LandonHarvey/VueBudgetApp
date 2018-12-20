@@ -97,6 +97,11 @@ export const store = new Vuex.Store({
     // mutate the current rows AmountBudgeted
     updateAmountBudgeted (state, payload) {
       state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount
+      let transactionTotal = state.budgetGroups[payload.groupId][payload.uid].amountBudgeted
+      state.budgetGroups[payload.groupId][payload.uid].trans.map(transaction => {
+        return transactionTotal -= transaction.transCost
+      })
+      state.budgetGroups[payload.groupId][payload.uid].remaining = transactionTotal
     },
     // mutate the current rows inputBudgeted
     updateInputBudget (state, payload) {
@@ -108,6 +113,12 @@ export const store = new Vuex.Store({
         return (index.transId === payload.tranid)
       })
       state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionId].transCost = payload.transAmount
+      // calculating remaining for budgetRow
+      let transactionTotal = state.budgetGroups[payload.groupBudgetId][payload.uid].amountBudgeted
+      state.budgetGroups[payload.groupBudgetId][payload.uid].trans.map(transaction => {
+        return transactionTotal -= transaction.transCost
+      })
+      state.budgetGroups[payload.groupBudgetId][payload.uid].remaining = transactionTotal
     },
     // mutate the current transaction rows Label
     updateTransLabel (state, payload) {

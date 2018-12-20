@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="budgetItemRowContent">
+    <div class="budgetItemRowContent" @click="showTransContainer = !showTransContainer">
       <!--input will update inputBudget-->
       <div class="budgetItemRow-Column">
         <div class="budgetItemLabel">
@@ -23,17 +23,19 @@
               </span>
       </div>
     </div>
-    <div v-for="(trans, key) of budgetTransRowsList" :key="key">
-      <budgetDetails id="transContainer" :rowuid="budgetitem.id" :groupBudgetId="groupId" :transItem="trans"></budgetDetails>
-    </div>
-    <div id="transactionContainer">
-      <div id="addTransaction">
-        <button @click="createNewTrans()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
-            <path fill="#FD0EBF" d="M3 0v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2z"></path>
-          </svg>
-          Add Transaction
-        </button>
+    <div v-if="showTransContainer" class="transFull">
+      <div v-for="(trans, key) of budgetTransRowsList" :key="key">
+        <budgetDetails id="transContainer" :rowuid="budgetitem.id" :groupBudgetId="groupId" :transItem="trans"></budgetDetails>
+      </div>
+      <div id="transactionContainer">
+        <div id="addTransaction">
+          <button @click="createNewTrans()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+              <path fill="#FD0EBF" d="M3 0v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2z"></path>
+            </svg>
+            Add Transaction
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -45,6 +47,11 @@ import budgetDetails from '../components/budgetDetails.vue'
 export default {
   components: {
     budgetDetails
+  },
+  data: () => {
+    return {
+      showTransContainer: false
+    }
   },
   props: {
     groupId: {
