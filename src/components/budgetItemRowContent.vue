@@ -1,20 +1,24 @@
 <template>
   <div>
     <div class="budgetItemRowContent" @click="showTransContainer = !showTransContainer">
+      <span v-if="showTransContainer" @click="deleteRow()" class="deleteRow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8">
+          <path d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z" />
+        </svg>
+      </span>
       <!--input will update inputBudget-->
-      <div class="budgetItemRow-Column">
+      <div class="budgetItemRow-Column1">
         <div class="budgetItemLabel">
           <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
         </div>
       </div>
-
       <!--input that will update amoundbudgeted -->
-      <div class="budgetItemRow-Column">
+      <div class="budgetItemRow-Column2">
         <div class="amountBudgetedInputContainer">
           <input v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
         </div>
       </div>
-      <div class="budgetItemRow-Column">
+      <div class="budgetItemRow-Column3">
               <span class="budgetItemSecondColumnMoney-Spent">
                   <span class="money-symbol">$</span>
                   <span class="money-integer">{{ this.budgetitem.remaining }}</span>
@@ -99,6 +103,13 @@ export default {
         id: this.groupId,
         buz: this.budgetitem.id
       })
+    },
+    deleteRow () {
+      this.$store.commit({
+        type: 'deleteRow',
+        id: this.groupId,
+        buz: this.budgetitem.id
+      })
     }
   }
 }
@@ -106,6 +117,15 @@ export default {
 </script>
 
 <style scoped>
+
+  .deleteRow {
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex: 0 1 6%;
+    z-index: 2;
+    margin-left: -5px;
+  }
 
   input[type=number]::-webkit-inner-spin-button,
   input[type=number]::-webkit-outer-spin-button {
@@ -124,20 +144,20 @@ export default {
     position: relative;
   }
 
-  .budgetItemRow-Column:first-of-type {
+  .budgetItemRow-Column1 {
     align-items: center;
     flex-wrap: wrap;
     display: flex;
-    flex: 0 1 50%;
+    flex: 0 1 45%;
     z-index: 2;
   }
 
-  .budgetItemRow-Column:nth-child(2), .budgetItemRow-Column:nth-child(3) {
+  .budgetItemRow-Column2, .budgetItemRow-Column3 {
     text-align: right;
     justify-content: flex-end;
     align-items: flex-end;
     display: flex;
-    flex: 0 1 25%;
+    flex: 0 1 28%;
     z-index: 2 ;
   }
 
