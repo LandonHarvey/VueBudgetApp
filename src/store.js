@@ -42,7 +42,6 @@ export const store = new Vuex.Store({
     budgetGroupsList: state => {
       return state.budgetGroups
     }
-    // should get single array items from budgetRows based on component being accessed
   },
 
   mutations: {
@@ -66,7 +65,7 @@ export const store = new Vuex.Store({
         }
       })
     },
-    // creates a new row and set into budgetRows object (generate uniq id as well)
+    // Creates a new row and set into budgetRows object (generate uniq id as well)
     createRow (state, index) {
       const uid = uniqId()
       Vue.set(state.budgetGroups[index], [uid], {
@@ -84,7 +83,7 @@ export const store = new Vuex.Store({
         ]
       })
     },
-    // creates a new transaction row and pushes into transaction array
+    // Creates a new transaction row and pushes into transaction array
     createTrans (state, payload) {
       const uid = uniqId()
       state.budgetGroups[payload.id][payload.buz].trans.push({
@@ -93,6 +92,10 @@ export const store = new Vuex.Store({
         transCost: 0,
         transId: uid
       })
+    },
+    // Delete the Whole Group
+    deleteGroup (state, payload) {
+      Vue.delete(state.budgetGroups, [payload.index])
     },
     // Deletes Row that is selected
     deleteRow (state, payload) {
@@ -111,7 +114,8 @@ export const store = new Vuex.Store({
       const transactionIndex = state.budgetGroups[payload.groupId][payload.uid].trans.findIndex(index => {
         return (index.transId === payload.transId)
       })
-      transactionTotal += state.budgetGroups[payload.groupId][payload.uid].trans[transactionIndex].transCost
+      transactionTotal = (((transactionTotal * 100) + (state.budgetGroups[payload.groupId][payload.uid].trans[transactionIndex].transCost * 100)) / 100)
+
       state.budgetGroups[payload.groupId][payload.uid].remaining = transactionTotal
     },
     // Mutate the current rows AmountBudgeted
@@ -119,7 +123,7 @@ export const store = new Vuex.Store({
       state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount
       let transactionTotal = state.budgetGroups[payload.groupId][payload.uid].amountBudgeted
       state.budgetGroups[payload.groupId][payload.uid].trans.map(transaction => {
-        transactionTotal -= transaction.transCost
+        transactionTotal = (((transactionTotal * 100) - (transaction.transCost * 100)) / 100)
         return transactionTotal
       })
       state.budgetGroups[payload.groupId][payload.uid].remaining = transactionTotal
@@ -133,21 +137,20 @@ export const store = new Vuex.Store({
       const transactionId = state.budgetGroups[payload.groupBudgetId][payload.uid].trans.findIndex(index => {
         return (index.transId === payload.tranid)
       })
-      state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionId].transCost = payload.transAmount
+      state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionId].transCost = ((payload.transAmount * 100) / 100)
       // calculating remaining for budgetRow
       let transactionTotal = state.budgetGroups[payload.groupBudgetId][payload.uid].amountBudgeted
       state.budgetGroups[payload.groupBudgetId][payload.uid].trans.map(transaction => {
-        transactionTotal -= transaction.transCost
+        transactionTotal = (((transactionTotal * 100) - (transaction.transCost * 100)) / 100)
         return transactionTotal
       })
       state.budgetGroups[payload.groupBudgetId][payload.uid].remaining = transactionTotal
     },
-    // mutate the current transaction rows Label
+    // Mutate the current transaction rows Label
     updateTransLabel (state, payload) {
       const transactionLabelId = state.budgetGroups[payload.groupBudgetId][payload.uid].trans.findIndex(index => {
         return (index.transId === payload.tranid)
       })
-      console.log(state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionLabelId].transLabel)
       state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionLabelId].transLabel = payload.transLabel
     }
   }
