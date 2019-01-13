@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import budgetItemRowContent from '../components/budgetItemRowContent.vue'
 import { store } from '../store'
+import budgetItemRowContent from '../components/budgetItemRowContent.vue'
 
 export default {
   name: 'budgetGroup',

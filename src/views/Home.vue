@@ -11,6 +11,7 @@
     </div>
     <div id="purchase" class="box">Purchase</div>
     <div id="budgetAndFinancialsContainer" class="box flex-container scrollSide">
+      <budgetGraph></budgetGraph>
       <div v-for="(budget, key) in budgetGroupViewLists" :key="key">
       <budgetGroup :numi="key" :group-card="[budget]"></budgetGroup>
       </div>
@@ -29,11 +30,13 @@
 
 <script>
 import budgetGroup from '../components/budgetGroup.vue'
+import budgetGraph from '../components/budgetGraph.vue'
 
 export default {
   name: 'homeView',
   components: {
-    budgetGroup
+    budgetGroup,
+    budgetGraph
   },
   data: () => {
     return {
