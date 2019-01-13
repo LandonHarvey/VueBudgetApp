@@ -82,7 +82,7 @@ export default {
     },
     amount: {
       get () {
-        return this.budgetitem.amountBudgeted
+        return this.budgetitem.amountBudgeted.toFixed(2)
       },
       set (value) {
         this.$store.commit('updateAmountBudgeted', {
@@ -141,6 +141,7 @@ export default {
     flex-wrap: nowrap;
     padding: .3em 1em;
     background-color: orangered;
+    box-shadow: 0 0 20px 2px black;
     position: relative;
   }
 
