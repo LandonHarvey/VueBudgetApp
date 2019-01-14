@@ -1,23 +1,64 @@
 <template>
-    <div class="budgetGraph">
-      <canvas id="budget" width="400px" height="400px"></canvas>
-    </div>
+  <div class="small">
+    <Pie-chart :chart-data="datacollection"></Pie-chart>
+    <button @click="fillData()">Randomize</button>
+  </div>
 </template>
 
 <script>
-import { store } from '../store'
-import Chart from 'chart.js'
+import PieChart from '../chart-data.js'
+import { store } from '../store.js'
 
 export default {
-  name: 'budgetGraph',
   components: {
-    store,
-    Chart
+    PieChart,
+    store
+  },
+  data () {
+    return {
+      datacollection: null,
+      budgetDataLoaded: false
+    }
+  },
+  methods: {
+    // where the data will be filled into the graph
+    fillData () {
+      this.datacollection = {
+        labels: ['hi', 'bye'],
+        datasets: [
+          {
+            label: 'hi',
+            backgroundColor: '#f87979',
+            data: [2]
+          },
+          {
+            label: 'bye',
+            backgroundColor: '#f87979',
+            data: [1]
+          }
+        ]
+      }
+    }
+  },
+  // computed: {
+  //   activeBudgetChartData () {
+  //
+  //   }
+  // },
+  mounted () {
+    this.fillData()
   }
+  // updated() {
+  //   // should update datacollection when it detects a change in the store
+  //   // (i.e. after updatePredictionData gets called)
+  //   this.fillData()
+  // }
 }
-
 </script>
 
-<style scoped>
-
+<style>
+  .small {
+    max-width: 600px;
+    margin:  150px auto;
+  }
 </style>

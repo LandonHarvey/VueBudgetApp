@@ -33,14 +33,19 @@ export const store = new Vuex.Store({
           }
         ]
       }}
-    ]
+    ],
+    budgetItemHeadings: ['Housing']
   },
 
   getters: {
     // Compute derived state based on the current state. More like computed property.
-    // gets the budgetGroup objects
+    // gets the budgetGroup Array
     budgetGroupsList: state => {
       return state.budgetGroups
+    },
+    // gets the budget Headings
+    budgetGroupsHeadings: state => {
+      return state.budgetItemHeadings
     }
   },
 
@@ -64,6 +69,7 @@ export const store = new Vuex.Store({
           ]
         }
       })
+      state.budgetItemHeadings.push('')
     },
     // Creates a new row and set into budgetRows object (generate uniq id as well)
     createRow (state, index) {
@@ -109,28 +115,33 @@ export const store = new Vuex.Store({
       Vue.delete(state.budgetGroups[payload.id][payload.rowId].trans, [transactionIndex])
     },
     // Updates AmountRemaining When a transaction is deleted
+    updateBudgetHeading (state, payload) {
+      state.budgetItemHeadings.splice(payload.index, 1, payload.heads)
+    },
+    // Updates Amount Budgeted when transaction is deleted
     updateAmountBudgetedOnDelete (state, payload) {
       let transactionTotal = state.budgetGroups[payload.groupId][payload.uid].remaining
       const transactionIndex = state.budgetGroups[payload.groupId][payload.uid].trans.findIndex(index => {
         return (index.transId === payload.transId)
       })
       transactionTotal = (((transactionTotal * 100) + (state.budgetGroups[payload.groupId][payload.uid].trans[transactionIndex].transCost * 100)) / 100)
-
-      state.budgetGroups[payload.groupId][payload.uid].remaining = transactionTotal
+      Vue.set(state.budgetGroups[payload.groupId][payload.uid], 'remaining', transactionTotal)
     },
     // Mutate the current rows AmountBudgeted
     updateAmountBudgeted (state, payload) {
-      state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount
+      Vue.set(state.budgetGroups[payload.groupId][payload.uid], 'amountBudgeted', payload.amount)
+      // state.budgetGroups[payload.groupId][payload.uid].amountBudgeted = payload.amount
       let transactionTotal = state.budgetGroups[payload.groupId][payload.uid].amountBudgeted
       state.budgetGroups[payload.groupId][payload.uid].trans.map(transaction => {
         transactionTotal = (((transactionTotal * 100) - (transaction.transCost * 100)) / 100)
         return transactionTotal
       })
-      state.budgetGroups[payload.groupId][payload.uid].remaining = transactionTotal
+      Vue.set(state.budgetGroups[payload.groupId][payload.uid], 'remaining', transactionTotal)
     },
-    // mutate the current rows inputBudgeted
+    // mutate the current rows budget Label
+    // TODO redo ALL OBJECT UPDATES WITH CORRECT https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
     updateInputBudget (state, payload) {
-      state.budgetGroups[payload.groupId][payload.uid].inputBudget = payload.label
+      Vue.set(state.budgetGroups[payload.groupId][payload.uid], 'inputBudget', payload.label)
     },
     // mutate the current transaction rows Cost
     updateTransCost (state, payload) {
@@ -144,14 +155,14 @@ export const store = new Vuex.Store({
         transactionTotal = (((transactionTotal * 100) - (transaction.transCost * 100)) / 100)
         return transactionTotal
       })
-      state.budgetGroups[payload.groupBudgetId][payload.uid].remaining = transactionTotal
+      Vue.set(state.budgetGroups[payload.groupBudgetId][payload.uid], 'remaining', transactionTotal)
     },
     // Mutate the current transaction rows Label
     updateTransLabel (state, payload) {
       const transactionLabelId = state.budgetGroups[payload.groupBudgetId][payload.uid].trans.findIndex(index => {
         return (index.transId === payload.tranid)
       })
-      state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionLabelId].transLabel = payload.transLabel
+      Vue.set(state.budgetGroups[payload.groupBudgetId][payload.uid].trans[transactionLabelId], 'transLabel', payload.transLabel)
     }
   }
 })
