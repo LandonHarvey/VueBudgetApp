@@ -34,7 +34,8 @@ export const store = new Vuex.Store({
         ]
       }}
     ],
-    budgetItemHeadings: ['Housing']
+    budgetItemHeadings: ['Housing'],
+    budgetGroupObjectId: [uid]
   },
 
   getters: {
@@ -46,6 +47,28 @@ export const store = new Vuex.Store({
     // gets the budget Headings
     budgetGroupsHeadings: state => {
       return state.budgetItemHeadings
+    },
+    budgetGroupsPlanned: state => {
+      let remainingArray = []
+      for (let i = 0; i < state.budgetGroups.length; i++) {
+        let objObjects = state.budgetGroups[i]
+        let arrayofobj = Object.keys(objObjects)
+        let num = i
+        let planned = 0
+        // console.log(objObjects)
+        // console.log(arrayofobj)
+        // console.log(arrayofobj[i])
+        for (let i = 0; i < arrayofobj.length; i++) {
+          planned += state.budgetGroups[num][arrayofobj[i]].remaining
+          console.log(planned)
+        }
+        remainingArray.push(planned)
+        console.log(remainingArray)
+      }
+      return remainingArray
+    },
+    budgetGroupsObjectIds: state => {
+      return state.budgetGroupObjectId
     }
   },
 
@@ -53,6 +76,7 @@ export const store = new Vuex.Store({
     // Mutate the current state
     // Used to create a new group and push into budgets Group object
     createGroup (state) {
+      const uid = uniqId()
       state.budgetGroups.push({
         [uid]: {
           inputBudget: '',
@@ -70,6 +94,7 @@ export const store = new Vuex.Store({
         }
       })
       state.budgetItemHeadings.push('')
+      state.budgetGroupObjectId.push(uid)
     },
     // Creates a new row and set into budgetRows object (generate uniq id as well)
     createRow (state, index) {
@@ -139,7 +164,6 @@ export const store = new Vuex.Store({
       Vue.set(state.budgetGroups[payload.groupId][payload.uid], 'remaining', transactionTotal)
     },
     // mutate the current rows budget Label
-    // TODO redo ALL OBJECT UPDATES WITH CORRECT https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
     updateInputBudget (state, payload) {
       Vue.set(state.budgetGroups[payload.groupId][payload.uid], 'inputBudget', payload.label)
     },
@@ -166,3 +190,5 @@ export const store = new Vuex.Store({
     }
   }
 })
+
+// TODO https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats

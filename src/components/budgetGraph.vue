@@ -24,27 +24,28 @@ export default {
     // where the data will be filled into the graph
     fillData () {
       this.datacollection = {
-        labels: ['hi', 'bye'],
+        labels: this.activeBudgetChartLabels,
         datasets: [
           {
-            label: 'hi',
-            backgroundColor: '#f87979',
-            data: [2]
-          },
-          {
-            label: 'bye',
-            backgroundColor: '#f87979',
-            data: [1]
+            label: 'Planned',
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)'
+            ],
+            data: this.activeBudgetChartPlanned
           }
         ]
       }
     }
   },
-  // computed: {
-  //   activeBudgetChartData () {
-  //
-  //   }
-  // },
+  computed: {
+    activeBudgetChartLabels () {
+      return this.$store.getters.budgetGroupsHeadings
+    },
+    activeBudgetChartPlanned () {
+      return this.$store.getters.budgetGroupsPlanned
+    }
+  },
   mounted () {
     this.fillData()
   }
@@ -59,6 +60,6 @@ export default {
 <style>
   .small {
     max-width: 600px;
-    margin:  150px auto;
+    margin:  15px auto;
   }
 </style>
