@@ -1,12 +1,12 @@
 <template>
   <div class="budgetGroup">
-    <header @click="showDeleteGroup = !showDeleteGroup">
+    <header tabindex="0" @click="showDeleteGroup = !showDeleteGroup" @blur="showDeleteGroup = false">
       <span v-if="showDeleteGroup" @click="deleteGroup()" class="deleteRow">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8">
           <path d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z" />
         </svg>
       </span>
-      <input id="cardTitle" title="CardTitle" v-model="heading" type="text" placeholder="Category"></header>
+      <input id="cardTitle" title="CardTitle" v-model="heading" type="text" placeholder="Category" @blur="showDeleteGroup = false"></header>
     <div class="tabBar">
       <div class="spacing"></div>
       <div class="planned">Planned</div>
@@ -19,7 +19,7 @@
         <!--creates new component when click event happens and places below-->
         <div v-for="(budget, key) in budgetItemRowsList" :key="key" v-if="Object.keys(budgetItemRowsList).length">
           <progress max="100" value="20"></progress>
-          <budgetItemRowContent :groupId="numi" :budgetitem="budget"></budgetItemRowContent>
+          <budgetItemRowContent :remainspent="remainspent" :groupId="numi" :budgetitem="budget"></budgetItemRowContent>
             <!--will create a new Transaction row inside of budgetRow-->
         </div>
       </div>
@@ -110,6 +110,10 @@ export default {
 </script>
 
 <style scoped>
+
+  [tabindex] {
+    outline: none;
+  }
 
   header {
     color:black;

@@ -4,14 +4,19 @@
     <div id="budheader" class="box">Budget Stuff</div>
     <div id="sidebar" class="box">Sidebar</div>
     <div id="mobileSidebar">
-      <div id="mobileMenuSidebar" class="box"><button id="mCircle" v-on:click="miniOpen = !miniOpen">M</button></div>
+      <div id="mobileMenuSidebar" class="box"><button id="mCircle" v-on:click="miniOpen = !miniOpen" v-on:blur="miniOpen = !miniOpen">M</button></div>
       <div v-if="miniOpen"><button id="statsBubble" class="minicircle" v-on:click="openBudget()">B</button></div>
       <div v-if="miniOpen"><button id="purchaseBubble" class="minicircle" v-on:click="openPurchase()">P</button></div>
       <div v-if="miniOpen"><button id="settingBubble" class="minicircle">O</button></div>
     </div>
     <div id="purchase" class="box">Purchase</div>
     <div id="budgetAndFinancialsContainer" class="box flex-container scrollSide">
-      <budgetGraph></budgetGraph>
+      <div id="budgetChartNavContainer">
+      <div class="budgetChartNav"><a>Total</a></div>
+        <div class="budgetChartNav"><a @click="openRemainingGraph()">Remaining</a></div>
+        <div class="budgetChartNav"><a>Spent</a></div>
+      </div>
+      <budgetGraph v-if="remainingGraphOpen"></budgetGraph>
       <div v-for="(budget, key) in budgetGroupViewLists" :key="key">
       <budgetGroup :numi="key" :group-card="[budget]"></budgetGroup>
       </div>
@@ -40,7 +45,10 @@ export default {
   },
   data: () => {
     return {
-      miniOpen: false
+      miniOpen: false,
+      remainingGraphOpen: false,
+      totalGraphOpen: false,
+      spentGraphOpen: false
     }
   },
   computed: {
@@ -57,6 +65,11 @@ export default {
       document.getElementById('purchase').style.zIndex = '10'
       document.getElementById('budgetAndFinancialsContainer').style.zIndex = '15'
     },
+    openRemainingGraph () {
+      this.remainingGraphOpen = true
+      this.totalGraphOpen = false
+      this.spentGraphOpen = false
+    },
     createBudgetGroup () {
       this.$store.commit('createGroup')
     }
@@ -66,6 +79,17 @@ export default {
 </script>
 
 <style scoped>
+  #budgetChartNavContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2em;
+  }
+
+  .budgetChartNav {
+    margin-right: 1em;
+    font-size: 1.3em;
+  }
 
   #homeView {
     grid-template-columns: 100%;

@@ -124,6 +124,7 @@ export const store = new Vuex.Store({
     // Delete the Whole Group
     deleteGroup (state, payload) {
       Vue.delete(state.budgetGroups, [payload.index])
+      Vue.delete(state.budgetItemHeadings, [payload.index])
     },
     // Deletes Row that is selected
     deleteRow (state, payload) {

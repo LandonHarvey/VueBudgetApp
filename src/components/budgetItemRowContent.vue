@@ -1,29 +1,27 @@
 <template>
-  <div>
-    <div class="budgetItemRowContent" @click="showTransContainer = !showTransContainer">
-      <span v-if="showTransContainer" @click="deleteRow()" class="deleteRow">
+  <div tabindex="0" @click="showTransContainer = true, showDeleteRow = true" @blur="showTransContainer = false, showDeleteRow = false">
+    <div class="budgetItemRowContent">
+      <span v-if="showDeleteRow" @click="deleteRow()" class="deleteRow">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8">
           <path d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z" />
         </svg>
       </span>
       <!--input will update inputBudget-->
       <div class="budgetItemRow-Column1">
-        <div class="budgetItemLabel">
-          <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
+        <div tabindex="1" class="budgetItemLabel">
+          <input @blur="showTransContainer = false, showDeleteRow = false" v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
         </div>
       </div>
       <!--input that will update amoundbudgeted -->
       <div class="budgetItemRow-Column2">
         <div class="amountBudgetedInputContainer">
-          <input v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
+          <input @blur="showTransContainer = false, showDeleteRow = false" v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
         </div>
       </div>
       <div class="budgetItemRow-Column3">
               <span class="budgetItemSecondColumnMoney-Spent">
                   <span class="money-symbol">$</span>
-                  <span class="money-integer">{{ this.budgetitem.remaining }}</span>
-                  <!--<span class="money-decimal">.</span>-->
-                  <!--<span class="money-fractional">00</span>-->
+                  <span class="money-integer">{{ displayed }}</span>
               </span>
       </div>
     </div>
@@ -52,11 +50,6 @@ export default {
   components: {
     budgetDetails
   },
-  data: () => {
-    return {
-      showTransContainer: false
-    }
-  },
   props: {
     groupId: {
       type: Number,
@@ -65,9 +58,28 @@ export default {
     budgetitem: {
       type: Object,
       required: true
+    },
+    remainspent: {
+      type: String,
+      required: true
+    }
+  },
+  data: () => {
+    return {
+      showTransContainer: false,
+      showDeleteRow: false
     }
   },
   computed: {
+    displayed: {
+      get () {
+        if (this.remainspent === 'Remaining') {
+          return this.budgetitem.remaining
+        } else if (this.remainspent === 'Spent') {
+          return this.budgetitem.amountBudgeted - this.budgetitem.remaining
+        }
+      }
+    },
     label: {
       get () {
         return this.budgetitem.inputBudget
