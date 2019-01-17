@@ -1,7 +1,6 @@
 <template>
   <div class="small">
-    <Pie-chart :chart-data="datacollection"></Pie-chart>
-    <button @click="fillData()">Randomize</button>
+    <Pie-chart v-if="budgetDataLoaded" :chart-data="datacollection"></Pie-chart>
   </div>
 </template>
 
@@ -16,9 +15,13 @@ export default {
   },
   data () {
     return {
-      datacollection: null,
-      budgetDataLoaded: false
+      budgetDataLoaded: false,
+      datacollection: null
     }
+  },
+  async mounted () {
+    this.fillData()
+    this.budgetDataLoaded = true
   },
   methods: {
     // where the data will be filled into the graph
@@ -46,8 +49,13 @@ export default {
       return this.$store.getters.budgetGroupsPlanned
     }
   },
-  mounted () {
-    this.fillData()
+  watch: {
+    activeBudgetChartPlanned () {
+      this.fillData()
+    },
+    activeBudgetChartLabels () {
+      this.fillData()
+    }
   }
   // updated() {
   //   // should update datacollection when it detects a change in the store

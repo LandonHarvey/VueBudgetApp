@@ -55,9 +55,6 @@ export const store = new Vuex.Store({
         let arrayofobj = Object.keys(objObjects)
         let num = i
         let planned = 0
-        // console.log(objObjects)
-        // console.log(arrayofobj)
-        // console.log(arrayofobj[i])
         for (let i = 0; i < arrayofobj.length; i++) {
           planned += state.budgetGroups[num][arrayofobj[i]].remaining
           console.log(planned)
