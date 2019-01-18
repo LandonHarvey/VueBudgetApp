@@ -34,7 +34,7 @@ export const store = new Vuex.Store({
         ]
       }}
     ],
-    budgetItemHeadings: ['Housing'],
+    budgetItemHeadings: ['Housing', 'Usable'],
     budgetGroupObjectId: [uid]
   },
 
@@ -63,11 +63,21 @@ export const store = new Vuex.Store({
         plannedArray.push(planned)
       }
       plannedArray.slice(0, 1)
-      console.log(plannedArray)
       return plannedArray
     },
     budgetGroupsChartRemaining: state => {
-      let remainingArray = []
+      let spent = 0
+      for (let i = 0; i < state.budgetGroups.length; i++) {
+        let objObjects = state.budgetGroups[i]
+        let arrayofobj = Object.keys(objObjects)
+        let num = i
+        for (let i = 0; i < arrayofobj.length; i++) {
+          spent += state.budgetGroups[num][arrayofobj[i]].amountBudgeted - state.budgetGroups[num][arrayofobj[i]].remaining
+        }
+        console.log(spent)
+      }
+      let remainingArray = [spent]
+      console.log(remainingArray)
       for (let i = 0; i < state.budgetGroups.length; i++) {
         let objObjects = state.budgetGroups[i]
         let arrayofobj = Object.keys(objObjects)
@@ -77,13 +87,25 @@ export const store = new Vuex.Store({
           remaining += state.budgetGroups[num][arrayofobj[i]].remaining
           // console.log(remaining)
         }
-        remainingArray.push(remaining)
+        remainingArray.splice(remainingArray.length - 1, 0, remaining)
         // console.log(remainingArray)
       }
+      console.log(remainingArray)
       return remainingArray
     },
     budgetGroupsChartSpent: state => {
-      let spentArray = []
+      let remaining = 0
+      for (let i = 0; i < state.budgetGroups.length; i++) {
+        let objObjects = state.budgetGroups[i]
+        let arrayofobj = Object.keys(objObjects)
+        let num = i
+        for (let i = 0; i < arrayofobj.length; i++) {
+          remaining += state.budgetGroups[num][arrayofobj[i]].remaining
+        }
+        console.log(remaining)
+      }
+      let spentArray = [remaining]
+      console.log(spentArray)
       for (let i = 0; i < state.budgetGroups.length; i++) {
         let objObjects = state.budgetGroups[i]
         let arrayofobj = Object.keys(objObjects)
@@ -95,10 +117,9 @@ export const store = new Vuex.Store({
           remaining += state.budgetGroups[num][arrayofobj[i]].remaining
           planned += state.budgetGroups[num][arrayofobj[i]].amountBudgeted
           spent = planned - remaining
-          // console.log(remaining)
+          // console.log(spent)
         }
-        spentArray.push(spent)
-        // console.log(remainingArray)
+        spentArray.splice(spentArray.length - 1, 0, spent)
       }
       return spentArray
     },
@@ -128,7 +149,7 @@ export const store = new Vuex.Store({
           ]
         }
       })
-      state.budgetItemHeadings.push('')
+      state.budgetItemHeadings.splice(state.budgetItemHeadings.length - 1, 0, '')
       state.budgetGroupObjectId.push(uid)
     },
     // Creates a new row and set into budgetRows object (generate uniq id as well)

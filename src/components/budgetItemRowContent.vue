@@ -152,7 +152,7 @@ export default {
     align-content: center;
     flex-wrap: nowrap;
     padding: .3em 1em;
-    background-color: orangered;
+    background-color: #878C8F;
     box-shadow: 0 0 20px 2px black;
     position: relative;
   }
@@ -184,7 +184,7 @@ export default {
     display: inline-block;
     margin: 0;
     width: 100%;
-    background: deepskyblue;
+    background: whitesmoke;
   }
 
   .budgetItemRow-Input {

@@ -133,7 +133,7 @@ export default {
 
   .budgetGroup {
     margin: .5em 0;
-    background: green;
+    background: #E3C0D3;
   }
 
   .spacing {
@@ -193,11 +193,11 @@ export default {
   }
 
   progress::-webkit-progress-value {
-    background: springgreen;
+    background: cyan;
   }
 
   progress::-webkit-progress-bar {
-    background: orange;
+    background: silver;
   }
 
   header>input {

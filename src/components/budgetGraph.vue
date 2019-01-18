@@ -30,21 +30,18 @@ export default {
       this.datacollection = {
         datasets: [
           {
-            label: this.activeBudgetChartLabels,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)'
-            ],
-            data: this.activeBudgetChartRemaining
-          },
-          {
             label: ['Planned'],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            backgroundColor: 'rgb(127,44,203)',
             data: this.activeBudgetChartPlanned
           },
           {
-            label: ['Spent'],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            label: this.activeBudgetChartLabels,
+            backgroundColor: ['rgba(163,11,55,0.2)', 'rgba(163,217,255,0.2)', 'rgba(127,44,203,0.2)', 'rgba(239,171,255,0.2)', 'rgba(230,194,41,0.2)'],
+            data: this.activeBudgetChartRemaining
+          },
+          {
+            label: this.activeBudgetChartLabels,
+            backgroundColor: ['rgba(163,11,55,0.2)', 'rgba(163,217,255,0.2)', 'rgba(127,44,203,0.2)', 'rgba(239,171,255,0.2)', 'rgba(230,194,41,0.2)'],
             data: this.activeBudgetChartSpent
           }
         ]
@@ -95,7 +92,8 @@ export default {
 
 <style>
   .small {
-    max-width: 600px;
+
     margin:  15px auto;
+    position: relative;
   }
 </style>

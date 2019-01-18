@@ -84,6 +84,8 @@ export default {
     flex-direction: row;
     justify-content: center;
     margin-top: 2em;
+    color: rgb(127,44,253);
+    font-size: 1.1em;
   }
 
   .budgetChartNav {

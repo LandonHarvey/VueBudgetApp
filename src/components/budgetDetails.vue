@@ -120,7 +120,7 @@ export default {
     align-content: center;
     flex-wrap: nowrap;
     padding: .3em 1em;
-    background-color: darkgoldenrod;
+    background-color: mediumslateblue;
     box-shadow: 0 0 20px 2px black;
     position: relative;
   }
@@ -152,7 +152,7 @@ export default {
     display: inline-block;
     margin: 0;
     width: 100%;
-    background: deepskyblue;
+    background: whitesmoke;
   }
 
   .transItemRow-Input {

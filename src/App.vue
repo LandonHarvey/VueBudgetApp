@@ -28,7 +28,7 @@ export default {
   }
 
   .box {
-    background-color: orange;
+    background-color: white;
   }
 
 </style>
