@@ -1,10 +1,10 @@
 
 // example of js file using vue-chartjs
-import { Pie, mixins } from 'vue-chartjs'
+import { Doughnut, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
 export default {
-  extends: Pie,
+  extends: Doughnut,
   mixins: [reactiveProp],
   props: {
     chartData: {

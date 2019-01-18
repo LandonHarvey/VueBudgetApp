@@ -1,22 +1,23 @@
 <template>
   <div class="small">
-    <Pie-chart v-if="budgetDataLoaded" :chart-data="datacollection"></Pie-chart>
+    <Doughnut v-if="budgetDataLoaded" :chart-data="datacollection" :options="optionCore"></Doughnut>
   </div>
 </template>
 
 <script>
-import PieChart from '../chart-data.js'
+import Doughnut from '../chart-data.js'
 import { store } from '../store.js'
 
 export default {
   components: {
-    PieChart,
+    Doughnut,
     store
   },
   data () {
     return {
       budgetDataLoaded: false,
-      datacollection: null
+      datacollection: null,
+      optionCore: null
     }
   },
   async mounted () {
@@ -27,17 +28,43 @@ export default {
     // where the data will be filled into the graph
     fillData () {
       this.datacollection = {
-        labels: this.activeBudgetChartLabels,
         datasets: [
           {
-            label: 'Planned',
+            label: this.activeBudgetChartLabels,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)'
             ],
             data: this.activeBudgetChartRemaining
+          },
+          {
+            label: ['Planned'],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            data: this.activeBudgetChartPlanned
+          },
+          {
+            label: ['Spent'],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            data: this.activeBudgetChartSpent
           }
         ]
+      }
+      this.optionCore = {
+        rotation: -1.0 * Math.PI,
+        circumference: Math.PI,
+        responsive: true,
+        legend: {
+          display: false
+        },
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              var dataset = data.datasets[tooltipItem.datasetIndex]
+              var index = tooltipItem.index
+              return dataset.label[index] + ': ' + dataset.data[index]
+            }
+          }
+        }
       }
     }
   },
@@ -47,6 +74,12 @@ export default {
     },
     activeBudgetChartRemaining () {
       return this.$store.getters.budgetGroupsChartRemaining
+    },
+    activeBudgetChartPlanned () {
+      return this.$store.getters.budgetGroupsChartPlanned
+    },
+    activeBudgetChartSpent () {
+      return this.$store.getters.budgetGroupsChartSpent
     }
   },
   watch: {
@@ -57,11 +90,6 @@ export default {
       this.fillData()
     }
   }
-  // updated() {
-  //   // should update datacollection when it detects a change in the store
-  //   // (i.e. after updatePredictionData gets called)
-  //   this.fillData()
-  // }
 }
 </script>
 

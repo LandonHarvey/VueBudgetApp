@@ -49,6 +49,7 @@ export const store = new Vuex.Store({
       return state.budgetItemHeadings
     },
     budgetGroupsChartPlanned: state => {
+      let plannedArray = []
       let planned = 0
       for (let i = 0; i < state.budgetGroups.length; i++) {
         let objObjects = state.budgetGroups[i]
@@ -58,8 +59,12 @@ export const store = new Vuex.Store({
           planned += state.budgetGroups[num][arrayofobj[i]].amountBudgeted
         }
       }
-      console.log(planned)
-      return planned
+      if (!Array.isArray(plannedArray) || !plannedArray.length) {
+        plannedArray.push(planned)
+      }
+      plannedArray.slice(0, 1)
+      console.log(plannedArray)
+      return plannedArray
     },
     budgetGroupsChartRemaining: state => {
       let remainingArray = []
@@ -76,6 +81,26 @@ export const store = new Vuex.Store({
         // console.log(remainingArray)
       }
       return remainingArray
+    },
+    budgetGroupsChartSpent: state => {
+      let spentArray = []
+      for (let i = 0; i < state.budgetGroups.length; i++) {
+        let objObjects = state.budgetGroups[i]
+        let arrayofobj = Object.keys(objObjects)
+        let num = i
+        let spent = 0
+        let remaining = 0
+        let planned = 0
+        for (let i = 0; i < arrayofobj.length; i++) {
+          remaining += state.budgetGroups[num][arrayofobj[i]].remaining
+          planned += state.budgetGroups[num][arrayofobj[i]].amountBudgeted
+          spent = planned - remaining
+          // console.log(remaining)
+        }
+        spentArray.push(spent)
+        // console.log(remainingArray)
+      }
+      return spentArray
     },
     budgetGroupsObjectIds: state => {
       return state.budgetGroupObjectId
