@@ -35,7 +35,7 @@ export default {
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)'
             ],
-            data: this.activeBudgetChartPlanned
+            data: this.activeBudgetChartRemaining
           }
         ]
       }
@@ -45,12 +45,12 @@ export default {
     activeBudgetChartLabels () {
       return this.$store.getters.budgetGroupsHeadings
     },
-    activeBudgetChartPlanned () {
-      return this.$store.getters.budgetGroupsPlanned
+    activeBudgetChartRemaining () {
+      return this.$store.getters.budgetGroupsChartRemaining
     }
   },
   watch: {
-    activeBudgetChartPlanned () {
+    activeBudgetChartRemaining () {
       this.fillData()
     },
     activeBudgetChartLabels () {

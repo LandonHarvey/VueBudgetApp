@@ -48,19 +48,32 @@ export const store = new Vuex.Store({
     budgetGroupsHeadings: state => {
       return state.budgetItemHeadings
     },
-    budgetGroupsPlanned: state => {
+    budgetGroupsChartPlanned: state => {
+      let planned = 0
+      for (let i = 0; i < state.budgetGroups.length; i++) {
+        let objObjects = state.budgetGroups[i]
+        let arrayofobj = Object.keys(objObjects)
+        let num = i
+        for (let i = 0; i < arrayofobj.length; i++) {
+          planned += state.budgetGroups[num][arrayofobj[i]].amountBudgeted
+        }
+      }
+      console.log(planned)
+      return planned
+    },
+    budgetGroupsChartRemaining: state => {
       let remainingArray = []
       for (let i = 0; i < state.budgetGroups.length; i++) {
         let objObjects = state.budgetGroups[i]
         let arrayofobj = Object.keys(objObjects)
         let num = i
-        let planned = 0
+        let remaining = 0
         for (let i = 0; i < arrayofobj.length; i++) {
-          planned += state.budgetGroups[num][arrayofobj[i]].remaining
-          console.log(planned)
+          remaining += state.budgetGroups[num][arrayofobj[i]].remaining
+          // console.log(remaining)
         }
-        remainingArray.push(planned)
-        console.log(remainingArray)
+        remainingArray.push(remaining)
+        // console.log(remainingArray)
       }
       return remainingArray
     },
