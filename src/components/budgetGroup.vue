@@ -133,7 +133,9 @@ export default {
 
   .budgetGroup {
     margin: .5em 0;
-    background: #E3C0D3;
+    background: white;
+    box-shadow: 1px 0px 8px 0px rgb(127,44,253);
+    border-radius: .7vh;
   }
 
   .spacing {

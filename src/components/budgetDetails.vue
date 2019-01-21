@@ -113,6 +113,10 @@ export default {
     margin-left: -10px;
   }
 
+  button {
+    all: unset;
+  }
+
   .transItemRowContent {
     display: flex;
     align-items: center;
@@ -121,7 +125,7 @@ export default {
     flex-wrap: nowrap;
     padding: .3em 1em;
     background-color: mediumslateblue;
-    box-shadow: 0 0 20px 2px black;
+
     position: relative;
   }
 

@@ -178,6 +178,7 @@ export default {
     }
 
     #budgetAndFinancialsContainer {
+      display: flex;
       grid-row: 2/3;
       grid-column: 1/2;
     }
@@ -188,7 +189,10 @@ export default {
     }
 
     .flex-container {
-      flex-direction: row;
+      flex-direction: column;
+    }
+    #budgetChartNavContainer{
+      display: flex;
     }
 
     #sidebar {

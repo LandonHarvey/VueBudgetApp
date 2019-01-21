@@ -1,5 +1,6 @@
 <template>
-  <div tabindex="0" @click="showTransContainer = true, showDeleteRow = true" @blur="showTransContainer = false, showDeleteRow = false">
+  <div tabindex="0" @focus="showTransContainer = true, showDeleteRow = true, isSelected = true" @blur="specialEvent($event)">
+    <!--@blur="showTransContainer = false, showDeleteRow = false, isSelected = false"-->
     <div class="budgetItemRowContent">
       <span v-if="showDeleteRow" @click="deleteRow()" class="deleteRow">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8">
@@ -9,13 +10,13 @@
       <!--input will update inputBudget-->
       <div class="budgetItemRow-Column1">
         <div tabindex="1" class="budgetItemLabel">
-          <input @blur="showTransContainer = false, showDeleteRow = false" v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
+          <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
         </div>
       </div>
       <!--input that will update amoundbudgeted -->
       <div class="budgetItemRow-Column2">
         <div class="amountBudgetedInputContainer">
-          <input @blur="showTransContainer = false, showDeleteRow = false" v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
+          <input v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
         </div>
       </div>
       <div class="budgetItemRow-Column3">
@@ -67,7 +68,8 @@ export default {
   data: () => {
     return {
       showTransContainer: false,
-      showDeleteRow: false
+      showDeleteRow: false,
+      isSelected: false
     }
   },
   computed: {
@@ -122,6 +124,15 @@ export default {
         id: this.groupId,
         buz: this.budgetitem.id
       })
+    },
+    specialEvent (e) {
+      if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
+        // Alt: (!e.relatedTarget || $(e.relatedTarget) == $('.ShippingGroupLinkList'))
+        this.showTransContainer = false
+        console.log('Not Inside')
+      } else if (e.relatedTarget || e.currentTarget.contains(e.relatedTarget)) {
+        console.log('Inside')
+      }
     }
   }
 }
@@ -137,6 +148,10 @@ export default {
     flex: 0 1 6%;
     z-index: 2;
     margin-left: -5px;
+  }
+
+  button {
+    all: unset;
   }
 
   input[type=number]::-webkit-inner-spin-button,
@@ -155,6 +170,7 @@ export default {
     background-color: #878C8F;
     box-shadow: 0 0 20px 2px black;
     position: relative;
+    border-radius: .7vh;
   }
 
   .budgetItemRow-Column1 {
