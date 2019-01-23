@@ -18,7 +18,7 @@
       <div class="budgetItemRow">
         <!--creates new component when click event happens and places below-->
         <div v-for="(budget, key) in budgetItemRowsList" :key="key" v-if="Object.keys(budgetItemRowsList).length">
-          <progress max="100" value="20"></progress>
+          <!--<progress max="100" value="20"></progress>-->
           <budgetItemRowContent :remainspent="remainspent" :groupId="numi" :budgetitem="budget"></budgetItemRowContent>
             <!--will create a new Transaction row inside of budgetRow-->
         </div>
@@ -186,21 +186,32 @@ export default {
     border: 0;
     vertical-align: baseline;
   }
-  progress {
-    color: lightblue;
-  }
 
-  progress::-webkit-progress-value {
-    background: lightblue;
-  }
+  /*#progressbar {*/
+    /*width: 100%;*/
+    /*background-color: silver;*/
+  /*}*/
 
-  progress::-webkit-progress-value {
-    background: cyan;
-  }
+  /*#bar {*/
+    /*width: 1%;*/
+    /*height: 5px;*/
+    /*background-color: cyan;*/
+  /*}*/
+  /*progress {*/
+    /*color: lightblue;*/
+  /*}*/
 
-  progress::-webkit-progress-bar {
-    background: silver;
-  }
+  /*progress::-webkit-progress-value {*/
+    /*background: lightblue;*/
+  /*}*/
+
+  /*progress::-webkit-progress-value {*/
+    /*background: cyan;*/
+  /*}*/
+
+  /*progress::-webkit-progress-bar {*/
+    /*background: silver;*/
+  /*}*/
 
   header>input {
     background-color: transparent;

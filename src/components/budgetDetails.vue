@@ -9,14 +9,14 @@
     <!--input will update transLabel-->
     <div class="transItemRow-Column1">
       <div class="transItemLabel">
-        <input v-model="tranLabel" type="text" maxlength="32" placeholder="transLabel" class="input-Trans-Inline-Small transItemRow-Input">
+        <input v-model="tranLabel" type="text" maxlength="32" placeholder="transLabel" class="input-Trans-Inline-Small transItemRow-Input" @blur="specialEventChild($event)">
       </div>
     </div>
 
     <!--input that will update Trans Amount -->
     <div class="transItemRow-Column2">
       <div class="transInputContainer">
-        <input v-model.number="transAmount" step=".01" class="transNumber transItemRow-Input input-Trans-Inline-Small" type="number" placeholder="$">
+        <input v-model.number="transAmount" step=".01" class="transNumber transItemRow-Input input-Trans-Inline-Small" type="number" placeholder="$" @blur="specialEventChild($event)">
       </div>
     </div>
     <div class="transItemRow-Column3">
@@ -33,7 +33,8 @@ export default {
   name: 'budgetDetails',
   data: () => {
     return {
-      showDelete: false
+      showDelete: false,
+      showingTransChild: false
     }
   },
   props: {
@@ -47,6 +48,10 @@ export default {
     },
     rowuid: {
       type: String,
+      required: true
+    },
+    showTrans: {
+      type: Boolean,
       required: true
     }
   },
@@ -97,6 +102,25 @@ export default {
         transIndex: this.transItem,
         transId: this.transItem.transId
       })
+    },
+    specialEventChild (e) {
+      if (e.relatedTarget == null) {
+        this.$emit('change', this.showingTransChild)
+        // this.showTransContainer = false
+        // this.showDeleteRow = false
+      } else if (((e.relatedTarget.parentElement.className.indexOf('budgetItemLabel') >= 0) ||
+        (e.relatedTarget.parentElement.className.indexOf('transItemLabel') >= 0) ||
+        (e.relatedTarget.parentElement.className.indexOf('transInputContainer') >= 0) ||
+        (e.relatedTarget.parentElement.id.indexOf('addTransaction') >= 0) ||
+        (e.relatedTarget.parentElement.className.indexOf('amountBudgetedInputContainer') >= 0))) {
+      } else {
+        this.$emit('change', this.showingTransChild)
+        // this.showTransContainer = false
+        // this.showDeleteRow = false
+      }
+    },
+    beforeMount () {
+
     }
   }
 }

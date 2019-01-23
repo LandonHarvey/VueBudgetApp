@@ -1,5 +1,8 @@
 <template>
   <div tabindex="0" @focus="showTransContainer = true, showDeleteRow = true, isSelected = true" @blur="specialEvent($event)">
+    <div class="progressbar">
+      <div class="bar"></div>
+    </div>
     <!--@blur="showTransContainer = false, showDeleteRow = false, isSelected = false"-->
     <div class="budgetItemRowContent">
       <span v-if="showDeleteRow" @click="deleteRow()" class="deleteRow">
@@ -10,13 +13,13 @@
       <!--input will update inputBudget-->
       <div class="budgetItemRow-Column1">
         <div tabindex="1" class="budgetItemLabel">
-          <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input">
+          <input v-model="label" type="text" maxlength="32" placeholder="Label" class="input-Budget-Inline-Small budgetItemRow-Input" @blur="specialEventChild($event)">
         </div>
       </div>
       <!--input that will update amoundbudgeted -->
       <div class="budgetItemRow-Column2">
         <div class="amountBudgetedInputContainer">
-          <input v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$">
+          <input v-model.number="amount" step=".01" class="amountBudgetedNumber budgetItemRow-Input input-Budget-Inline-Small" type="number" placeholder="$" @blur="specialEventChild($event)">
         </div>
       </div>
       <div class="budgetItemRow-Column3">
@@ -28,7 +31,7 @@
     </div>
     <div v-if="showTransContainer" class="transFull">
       <div v-for="(trans, key) of budgetTransRowsList" :key="key">
-        <budgetDetails id="transContainer" :rowuid="budgetitem.id" :groupBudgetId="groupId" :transItem="trans"></budgetDetails>
+        <budgetDetails id="transContainer" :rowuid="budgetitem.id" :groupBudgetId="groupId" :transItem="trans" :showTrans="showTransContainer" @change="showTransContainer = $event, showDeleteRow = $event"></budgetDetails>
       </div>
       <div id="transactionContainer">
         <div id="addTransaction">
@@ -68,8 +71,7 @@ export default {
   data: () => {
     return {
       showTransContainer: false,
-      showDeleteRow: false,
-      isSelected: false
+      showDeleteRow: false
     }
   },
   computed: {
@@ -108,6 +110,11 @@ export default {
     },
     budgetTransRowsList () {
       return this.$store.getters.budgetGroupsList[this.groupId][this.budgetitem.id].trans
+    },
+    groups: {
+      get () {
+        return this.$store.getters.budgetGroupsList
+      }
     }
   },
   methods: {
@@ -127,11 +134,69 @@ export default {
     },
     specialEvent (e) {
       if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
-        // Alt: (!e.relatedTarget || $(e.relatedTarget) == $('.ShippingGroupLinkList'))
         this.showTransContainer = false
-        console.log('Not Inside')
+        this.showDeleteRow = false
       } else if (e.relatedTarget || e.currentTarget.contains(e.relatedTarget)) {
-        console.log('Inside')
+        e.relatedTarget.focus()
+      }
+    },
+    specialEventChild (e) {
+      if (e.relatedTarget == null) {
+        this.showTransContainer = false
+        this.showDeleteRow = false
+      } else if (((e.relatedTarget.parentElement.className.indexOf('budgetItemLabel') >= 0) ||
+        (e.relatedTarget.parentElement.className.indexOf('transItemLabel') >= 0) ||
+        (e.relatedTarget.parentElement.className.indexOf('transInputContainer') >= 0) ||
+        (e.relatedTarget.parentElement.id.indexOf('addTransaction') >= 0) ||
+        (e.relatedTarget.parentElement.className.indexOf('amountBudgetedInputContainer') >= 0))) {
+      } else {
+        this.showTransContainer = false
+        this.showDeleteRow = false
+      }
+    }
+  },
+  watch: {
+    // Insanity that runs the progress bar
+    // TODO Need to condence this
+    displayed () {
+      let count = -1
+      let elem = document.getElementsByClassName('bar')
+      let width = 1
+      // console.log(this.groups)
+      for (let group in this.groups) {
+        // console.log(count)
+        for (let row in this.groups[group]) {
+          // console.log(this.groups[group])
+          count++
+          // console.log(count)
+          if (this.groups[group].id === row) {
+            // console.log(count)
+            break
+          }
+        }
+      }
+      if (this.remainspent === 'Remaining') {
+        width = (this.budgetitem.remaining / this.budgetitem.amountBudgeted) * 100
+        // console.log(this.budgetitem.amountBudgeted)
+        if (width < 0) {
+          width = 100
+          elem[count].style.backgroundColor = 'red'
+          elem[count].style.width = width + '%'
+        } else {
+          elem[count].style.backgroundColor = 'cyan'
+          elem[count].style.width = width + '%'
+          // console.log(elem[count].style.width)
+        }
+      } else if (this.remainspent === 'Spent') {
+        width = ((this.budgetitem.amountBudgeted - this.budgetitem.remaining) / this.budgetitem.amountBudgeted) * 100
+        if (width < 0) {
+          width = 100
+          elem[count].style.backgroundColor = 'red'
+          elem[count].style.width = width + '%'
+        } else {
+          elem[count].style.backgroundColor = 'cyan'
+          elem[count].style.width = width + '%'
+        }
       }
     }
   }
@@ -140,6 +205,19 @@ export default {
 </script>
 
 <style scoped>
+
+  .progressbar {
+    width: 100%;
+    background-color: silver;
+    border-radius: .7vh;
+  }
+
+  .bar {
+    width: 1%;
+    height: 5px;
+    background-color: cyan;
+    border-radius: .7vh;
+  }
 
   .deleteRow {
     align-items: center;
@@ -168,7 +246,7 @@ export default {
     flex-wrap: nowrap;
     padding: .3em 1em;
     background-color: #878C8F;
-    box-shadow: 0 0 20px 2px black;
+    /*box-shadow: 0 0 20px 2px black;*/
     position: relative;
     border-radius: .7vh;
   }
