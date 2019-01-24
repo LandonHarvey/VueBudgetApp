@@ -74,10 +74,10 @@ export const store = new Vuex.Store({
         for (let i = 0; i < arrayofobj.length; i++) {
           spent += state.budgetGroups[num][arrayofobj[i]].amountBudgeted - state.budgetGroups[num][arrayofobj[i]].remaining
         }
-        console.log(spent)
+        // console.log(spent)
       }
       let remainingArray = [spent]
-      console.log(remainingArray)
+      // console.log(remainingArray)
       for (let i = 0; i < state.budgetGroups.length; i++) {
         let objObjects = state.budgetGroups[i]
         let arrayofobj = Object.keys(objObjects)
@@ -90,7 +90,7 @@ export const store = new Vuex.Store({
         remainingArray.splice(remainingArray.length - 1, 0, remaining)
         // console.log(remainingArray)
       }
-      console.log(remainingArray)
+      // console.log(remainingArray)
       return remainingArray
     },
     budgetGroupsChartSpent: state => {
@@ -102,10 +102,10 @@ export const store = new Vuex.Store({
         for (let i = 0; i < arrayofobj.length; i++) {
           remaining += state.budgetGroups[num][arrayofobj[i]].remaining
         }
-        console.log(remaining)
+        // console.log(remaining)
       }
       let spentArray = [remaining]
-      console.log(spentArray)
+      // console.log(spentArray)
       for (let i = 0; i < state.budgetGroups.length; i++) {
         let objObjects = state.budgetGroups[i]
         let arrayofobj = Object.keys(objObjects)

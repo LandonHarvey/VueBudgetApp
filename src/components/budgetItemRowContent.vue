@@ -78,9 +78,9 @@ export default {
     displayed: {
       get () {
         if (this.remainspent === 'Remaining') {
-          return this.budgetitem.remaining
+          return (this.budgetitem.remaining).toFixed(2)
         } else if (this.remainspent === 'Spent') {
-          return this.budgetitem.amountBudgeted - this.budgetitem.remaining
+          return (((this.budgetitem.amountBudgeted - this.budgetitem.remaining) * 100) / 100).toFixed(2)
         }
       }
     },
@@ -157,22 +157,22 @@ export default {
   },
   watch: {
     // Insanity that runs the progress bar
-    // TODO Need to condence this
+    // TODO Need to condense this
     displayed () {
       let count = -1
       let elem = document.getElementsByClassName('bar')
       let width = 1
-      // console.log(this.groups)
+      let found = false
       for (let group in this.groups) {
-        // console.log(count)
         for (let row in this.groups[group]) {
-          // console.log(this.groups[group])
           count++
-          // console.log(count)
-          if (this.groups[group].id === row) {
-            // console.log(count)
+          if (this.budgetitem.id === row) {
+            found = true
             break
           }
+        }
+        if (found === true) {
+          break
         }
       }
       if (this.remainspent === 'Remaining') {
