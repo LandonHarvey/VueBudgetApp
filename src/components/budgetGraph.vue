@@ -58,7 +58,17 @@ export default {
             label: function (tooltipItem, data) {
               var dataset = data.datasets[tooltipItem.datasetIndex]
               var index = tooltipItem.index
-              return dataset.label[index] + ': ' + dataset.data[index]
+              console.log(tooltipItem)
+              console.log(data)
+              console.log(index)
+              console.log(dataset)
+              if (tooltipItem.index === dataset.data.length - 1 && tooltipItem.datasetIndex === 2) {
+                return 'Remaining' + ': ' + dataset.data[index]
+              } else if (tooltipItem.index === dataset.data.length - 1 && tooltipItem.datasetIndex === 1) {
+                return 'Spent' + ': ' + dataset.data[index]
+              } else {
+                return dataset.label[index] + ': ' + dataset.data[index]
+              }
             }
           }
         }
