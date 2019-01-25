@@ -9,7 +9,9 @@
       <div v-if="miniOpen"><button id="purchaseBubble" class="minicircle" v-on:click="openPurchase()">P</button></div>
       <div v-if="miniOpen"><button id="settingBubble" class="minicircle">O</button></div>
     </div>
-    <div id="purchase" class="box">Purchase</div>
+    <div id="purchase" class="box">Purchase
+    <purchase-main></purchase-main>
+    </div>
     <div id="budgetAndFinancialsContainer" class="box flex-container scrollSide">
       <div id="budgetChartNavContainer">
       <div class="budgetChartNav"><a>Total</a></div>
@@ -36,12 +38,14 @@
 <script>
 import budgetGroup from '../components/budgetGroup.vue'
 import budgetGraph from '../components/budgetGraph.vue'
+import purchaseMain from '../components/purchaseMain'
 
 export default {
   name: 'homeView',
   components: {
     budgetGroup,
-    budgetGraph
+    budgetGraph,
+    purchaseMain
   },
   data: () => {
     return {
