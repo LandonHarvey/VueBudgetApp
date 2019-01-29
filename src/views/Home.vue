@@ -4,7 +4,7 @@
     <div id="budheader" class="box">Budget Stuff</div>
     <div id="sidebar" class="box">Sidebar</div>
     <div id="mobileSidebar">
-      <div id="mobileMenuSidebar" class="box"><button id="mCircle" v-on:click="miniOpen = !miniOpen" v-on:blur="miniOpen = !miniOpen">M</button></div>
+      <div id="mobileMenuSidebar" class="box"><button id="mCircle" v-on:click="miniOpen = !miniOpen">M</button></div>
       <div v-if="miniOpen"><button id="statsBubble" class="minicircle" v-on:click="openBudget()">B</button></div>
       <div v-if="miniOpen"><button id="purchaseBubble" class="minicircle" v-on:click="openPurchase()">P</button></div>
       <div v-if="miniOpen"><button id="settingBubble" class="minicircle">O</button></div>

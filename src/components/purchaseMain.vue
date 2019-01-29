@@ -7,8 +7,9 @@
       <div id="searchContainer">
         <input id="searchBar" type="text" placeholder="Search...">
         <div>
-          <button id="searchButton" @click="fetchData()">Search</button>
+          <button id="searchButton" @click.once="fetchData(), created()">Search</button>
         </div>
+        {{this.info}}
       </div>
       <div v-if="showResults" id="searchResults">
         <div v-for="(tvs, key) in walmartJson" :key="key" id="itemContainer">
@@ -20,19 +21,41 @@
 
 <script>
 import walmartJson from '../assets/walmartsamsung'
+import axios from 'axios'
 
 export default {
   name: 'purchaseMain',
   data () {
     return {
       walmartJson,
-      showResults: false
+      showResults: false,
+      info: [],
+      errors: []
     }
   },
   methods: {
     fetchData () {
       this.showResults = true
       console.log()
+    },
+    created () {
+      let url = 'http://svcs.sandbox.ebay.com/services/search/FindingService/v1'
+      url += '?OPERATION-NAME=findItemsByKeywords'
+      url += '&SERVICE-VERSION=1.3.0'
+      url += '&SECURITY-APPNAME= APIKEY'
+      url += '&GLOBAL-ID=EBAY-US'
+      url += '&RESPONSE-DATA-FORMAT=JSON'
+      url += '&callback=_cb_findItemsByKeywords'
+      url += '&REST-PAYLOAD'
+      url += '&keywords=harry%20potter'
+      url += '&paginationInput.entriesPerPage=3'
+
+      axios.get(url)
+        .then(data => {
+          this.info = data
+        }).catch(error => {
+          console.log(error)
+        })
     }
   }
 }
