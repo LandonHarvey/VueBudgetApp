@@ -29,53 +29,43 @@
 </template>
 
 <script>
-  import walmartJson from '../assets/walmartsamsung'
-  import axios from 'axios'
-  export default {
-    name: 'purchaseMain',
-    data () {
-      return {
-        walmartJson,
-        showResults: false,
-        info: [],
-        errors: [],
-        ebaySearch: ''
-      }
+import walmartJson from '../assets/walmartsamsung'
+import axios from 'axios'
+export default {
+  name: 'purchaseMain',
+  data () {
+    return {
+      walmartJson,
+      showResults: false,
+      info: [],
+      errors: [],
+      ebaySearch: ''
+    }
+  },
+  methods: {
+    fetchData () {
+      this.showResults = true
+      console.log()
     },
-    methods: {
-      fetchData () {
-        this.showResults = true
-        console.log()
-      },
-      created () {
-        let url = 'https://api.ebay.com/buy/browse/v1/item_summary/search?'
-        url += 'q=' + this.ebaySearch + '&'
-        url += 'limit=10'
+    created () {
+      let url = 'https://api.ebay.com/buy/browse/v1/item_summary/search?'
+      url += 'q=' + this.ebaySearch + '&'
+      url += 'limit=10'
 
-        // let url = 'https://cors-anywhere.herokuapp.com/http://svcs.sandbox.ebay.com/services/search/FindingService/v1'
-        // url += '?OPERATION-NAME=findItemsByKeywords'
-        // url += '&SERVICE-VERSION=1.0.0'
-        // url += '&SECURITY-APPNAME='
-        // url += '&GLOBAL-ID=EBAY-US'
-        // url += '&RESPONSE-DATA-FORMAT=JSON'
-        // url += '&keywords='
-        // url += ebaySearch
-        // url += '&REST-PAYLOAD'
-        // url += '&paginationInput.entriesPerPage=6'
-        axios.get(url, {
-          headers: {
-            Authorization: 'Bearer' + ' ' +           }})
-          .then(data => {
-            this.info = data.data.itemSummaries
-            console.log(this.info)
-            // this.info = data.data.findItemsByKeywordsResponse[0].searchResult[0].item
-            // console.log(this.info[0].galleryURL[0])
-          }).catch(error => {
+      axios.get(url, {
+        headers: {
+          Authorization: 'Bearer' + ' ' +         }})
+        .then(data => {
+          this.info = data.data.itemSummaries
+          console.log(this.info)
+          // this.info = data.data.findItemsByKeywordsResponse[0].searchResult[0].item
+          // console.log(this.info[0].galleryURL[0])
+        }).catch(error => {
           console.log(error)
         })
-      }
     }
   }
+}
 </script>
 
 <style scoped>
