@@ -7,19 +7,22 @@
       <div id="searchContainer">
         <input id="searchBar" type="text" placeholder="Search..." v-model="ebaySearch">
         <div>
-          <button id="searchButton" @click.once="fetchData(), created()">Search</button>
+          <button id="searchButton" @click="fetchData(), created()">Search</button>
         </div>
       </div>
       <div id="ebaySearchContainer">
         <div v-for="(item,key) in info" :key="key" id="ebaySearch">
-          <img class="ebayImg" :src="item.galleryURL" alt="NOPE">
-          <div>{{item.title[0]}}</div>
-          <div id="ebayPrice">PRICE: {{item.sellingStatus[0].currentPrice[0].__value__}}</div>
+          <img class="ebayImg" :src="item.image.imageUrl" alt="NOPE">
+          <h4><a v-bind:href="item.itemWebUrl">{{item.title}}</a></h4>
+          <div id="ebayPrice">PRICE: {{item.price.value}}</div>
         </div>
       </div>
       <div v-if="showResults" id="searchResults">
         <div v-for="(tvs, key) in walmartJson" :key="key" id="itemContainer">
-          <h4>{{walmartJson[key].title}}</h4><img v-bind:src="walmartJson[key].image"/><div>{{walmartJson[key].price}}</div></div>
+          <img :src="walmartJson[key].image"/>
+          <h4>{{walmartJson[key].title}}</h4>
+          <div>{{walmartJson[key].price}}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,20 +48,28 @@
         console.log()
       },
       created () {
-        let url = 'https://cors-anywhere.herokuapp.com/http://svcs.sandbox.ebay.com/services/search/FindingService/v1'
-        url += '?OPERATION-NAME=findItemsByKeywords'
-        url += '&SERVICE-VERSION=1.0.0'
-        url += '&SECURITY-APPNAME='
-        url += '&GLOBAL-ID=EBAY-US'
-        url += '&RESPONSE-DATA-FORMAT=JSON'
-        url += '&keywords='
-        url += this.ebaySearch
-        url += '&REST-PAYLOAD'
-        url += '&paginationInput.entriesPerPage=3'
-        axios.get(url)
+        let url = 'https://api.ebay.com/buy/browse/v1/item_summary/search?'
+        url += 'q=' + this.ebaySearch + '&'
+        url += 'limit=10'
+
+        // let url = 'https://cors-anywhere.herokuapp.com/http://svcs.sandbox.ebay.com/services/search/FindingService/v1'
+        // url += '?OPERATION-NAME=findItemsByKeywords'
+        // url += '&SERVICE-VERSION=1.0.0'
+        // url += '&SECURITY-APPNAME='
+        // url += '&GLOBAL-ID=EBAY-US'
+        // url += '&RESPONSE-DATA-FORMAT=JSON'
+        // url += '&keywords='
+        // url += ebaySearch
+        // url += '&REST-PAYLOAD'
+        // url += '&paginationInput.entriesPerPage=6'
+        axios.get(url, {
+          headers: {
+            Authorization: 'Bearer' + ' ' +           }})
           .then(data => {
-            this.info = data.data.findItemsByKeywordsResponse[0].searchResult[0].item
-            console.log(this.info[0].galleryURL[0])
+            this.info = data.data.itemSummaries
+            console.log(this.info)
+            // this.info = data.data.findItemsByKeywordsResponse[0].searchResult[0].item
+            // console.log(this.info[0].galleryURL[0])
           }).catch(error => {
           console.log(error)
         })
@@ -98,21 +109,34 @@
   }
   #ebaySearchContainer{
     display: flex;
-    justify-content: center;
-    flex-direction: column;
+    flex-wrap: wrap;
+    flex-direction: row;
   }
   #ebaySearch {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: space-between;
     width: 49%;
-    padding-bottom: 3em;
+    height: auto;
+    padding: 2em;
   }
   .ebayImg {
-    width: 100px;
-    height: 60px  ;
+    width: 50%;
+    min-height:171px;
   }
   #ebayPrice {
     float: right;
+    font-weight: bold;
   }
 
+  a {
+    color: black;
+    text-decoration: none;
+  }
 
+  a:hover {
+    color: rgb(127,44,253);
+  }
 </style>
