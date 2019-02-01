@@ -50,11 +50,14 @@ export default {
     created () {
       let url = 'https://api.ebay.com/buy/browse/v1/item_summary/search?'
       url += 'q=' + this.ebaySearch + '&'
+      url += 'filter=max' + '&'
+      url += 'DeliveryCost:0' + '&'
       url += 'limit=10'
 
       axios.get(url, {
         headers: {
-          Authorization: 'Bearer' + ' ' +         }})
+          Authorization: 'Bearer' + ' ' + code
+        }})
         .then(data => {
           this.info = data.data.itemSummaries
           console.log(this.info)
